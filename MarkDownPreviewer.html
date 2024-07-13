@@ -1,0 +1,227 @@
+<html>
+
+<head>
+    <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        #fullview {
+            width: 100vw;
+            height: 100vh;
+            margin-top: 2%;
+            display: grid;
+        }
+
+        body {
+            background: rgb(224, 224, 224);
+        }
+
+        #fullnav {
+            width: 100vw;
+            background: rgb(29, 76, 95);
+            padding-top: 1%;
+            padding-bottom: 1%;
+            padding-left: 1%;
+            font-size: 25px;
+            font-family: HP Simplified;
+            color: white;
+        }
+
+        #fulledit {
+            width: 100vw;
+            height: 100vh;
+            color: rgb(107, 201, 255);
+            background: black;
+        }
+
+        #fullprev {
+            width: 100vw;
+            height: 100vh;
+            background: white;
+        }
+
+        #editor {
+            padding-left: 40%;
+            padding-right: 10%;
+            margin-bottom: 3%;
+            margin-top: 2%;
+        }
+
+        #editornav {
+            background: rgb(29, 76, 95);
+            width: 50vw;
+            padding-top: 1%;
+            padding-bottom: 1%;
+            padding-left: 1%;
+            font-size: 25px;
+            font-family: HP Simplified;
+            color: white;
+        }
+
+        #editortext {
+            width: 50.5vw;
+            height: 50vh;
+            color: rgb(107, 201, 255);
+            background: black;
+        }
+
+        #heading {
+            text-align: center;
+            margin-top: 5%;
+            font-size: 40px;
+            font-family: HP Simplified;
+        }
+
+        #icon {
+            margin-left: 86%;
+        }
+
+        #previewer {
+            padding-left: 20%;
+            padding-right: 10%;
+            display: grid;
+        }
+
+        #previewernav {
+            background: rgb(75, 56, 56);
+            width: 59.4vw;
+            padding-top: 1%;
+            padding-bottom: 1%;
+            padding-left: 1%;
+            font-size: 20px;
+            font-family: HP Simplified;
+            color: white;
+
+        }
+
+        #editoricon {
+            margin-left: 85%;
+        }
+
+        #previcon {
+            margin-left: 85%;
+        }
+
+        #previewertext {
+            background: white;
+            color: black;
+            width: 60vw;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="heading">Mark Down Previewer</div>
+    <div id="app">
+    </div>
+    <script src="https://unpkg.com/marked@0.3.6/marked.min.js"></script>
+    <script type="text/babel">
+        class MP extends React.Component {
+            constructor(props) {
+                super(props);
+                this.state = {
+                    markdown: placeholder,
+                    editorView: false,
+                    previewerView: false
+                };
+            }
+            handleChange(event) {
+                this.setState({
+                    markdown: event.target.value
+                })
+            }
+            handleEditor() {
+                this.setState(state => ({
+                    editorView: !state.editorView
+                }))
+            }
+            handlePreview() {
+                this.setState(state => ({
+                    previewerView: !state.previewerView
+                }))
+            }
+            render() {
+                var p = marked(this.state.markdown);
+                if (this.state.editorView) {
+                    return (
+                        <div id="fullview">
+                            <nav id="fullnav">Editor<button onClick={this.handleEditor.bind(this)} id="icon"><i class="fa fa-window-minimize"></i> </button></nav>
+                            <textarea id="fulledit" onChange={this.handleChange.bind(this)} value={this.state.markdown}>{placeholder}</textarea>
+                        </div>
+                    );
+                }
+                else if (this.state.previewerView) {
+                    return (
+                        <div id="fullview">
+                            <nav id="fullnav">Previewer
+                                <button onClick={this.handlePreview.bind(this)} id="icon"><i class="fa fa-window-minimize"></i></button>
+                            </nav>
+                            <div id="fullprev" dangerouslySetInnerHTML={{ __html: p }}></div>
+                        </div>
+                    );
+                }
+                else {
+                    return (
+                        <div>
+                            <div id="editor">
+                                <nav id="editornav">Editor<button onClick={this.handleEditor.bind(this)} id="editoricon"><i class="fa fa-window-maximize"></i></button></nav>
+                                <textarea id="editortext" onChange={this.handleChange.bind(this)} value={this.state.markdown}>{placeholder}</textarea>
+                            </div>
+                            <div id="previewer">
+                                <nav id="previewernav">Previewer
+                                    <button onClick={this.handlePreview.bind(this)} id="previcon"><i class="fa fa-window-maximize"></i></button>
+                                </nav>
+                                <div id="previewertext" dangerouslySetInnerHTML={{ __html: p }}></div>
+                            </div>
+                        </div>
+
+                    )
+                }
+
+            }
+        }
+
+        const placeholder = `Marked - Markdown Parser
+========================
+
+[Marked] lets you convert [Markdown] into HTML.  Markdown is a simple text format whose goal is to be very easy to read and write, even when not converted to HTML.  This demo page will let you type anything you like and see how it gets converted.  Live.  No more waiting around.
+
+How To Use The Demo
+-------------------
+
+1. Type in stuff on the left.
+2. See the live updates on the right.
+
+That's it.  Pretty simple.  There's also a drop-down option in the upper right to switch between various views:
+
+- **Preview:**  A live display of the generated HTML as it would render in a browser.
+- **HTML Source:**  The generated HTML before your browser makes it pretty.
+- **Lexer Data:**  What [marked] uses internally, in case you like gory stuff like this.
+- **Quick Reference:**  A brief run-down of how to format things using markdown.
+
+Why Markdown?
+-------------
+
+It's easy.  It's not overly bloated, unlike HTML.  Also, as the creator of [markdown] says,
+
+> The overriding design goal for Markdown's
+> formatting syntax is to make it as readable
+> as possible. The idea is that a
+> Markdown-formatted document should be
+> publishable as-is, as plain text, without
+> looking like it's been marked up with tags
+> or formatting instructions.
+
+Ready to start writing?  Either start changing stuff on the left or
+[clear everything](/demo/?text=) with a simple click.
+
+[Marked]: https://github.com/markedjs/marked/
+[Markdown]: http://daringfireball.net/projects/markdown/
+            `;
+
+        ReactDOM.render(<MP />, document.getElementById('app'));
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,333 @@
+<html>
+    <head>
+        <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+        <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+        <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+        <style>
+            #body{
+            margin:0px;
+            background:url("https://www.maxpixel.net/static/photo/1x/Music-Background-Equipment-Musical-Background-Guitar-2886886.jpg");
+            background-size:cover;
+            font-family:Times New Roman;
+            font-weight:bold;
+            }
+            #keys{
+            padding-top:4%;
+            display:grid;
+            grid-template-columns:1fr 1fr 1fr;
+            grid-column-gap:3px;
+            grid-row-gap:2px;
+            width:30%;
+            height:35vh;
+            margin-left:35%;
+            }
+            .power,.bank{
+            width:30px;
+            height:20px;
+            }
+            #drum-machine{
+            border:10px #000000 solid;
+            background:linear-gradient(to bottom, #000000 , #34f1ff , #000000 );
+            font-family:Times New Roman;
+            margin-left:20%;
+            margin-right:20%;
+            margin-top:15%;
+            margin-bottom:20%;
+            padding-bottom:5%;
+            }
+            #display{
+            background:rgb(255, 255, 255);
+            margin-left:31%;
+            margin-right:30%;
+            margin-top:2%;
+            text-align:center;
+            padding-top:2%;
+            padding-bottom:2%;
+            }
+            #control{
+            margin-left:33%;
+            margin-right:31%;
+            margin-top:2%;
+            display:grid;
+            grid-template-columns:1fr 1fr;
+            }
+            button:active{
+            background:orange;
+            }
+            #slider{
+            margin-left:43%;
+            margin-top:3%;
+            }
+            #index{
+            margin-top:5%;
+            text-align:center;
+            font-size:40px;
+            font-family:Brush Script MT;
+            color:white;
+            }
+
+
+
+        </style>
+    </head>
+    <body id="body">
+        <script type="text/babel">
+                var bank=["Q","W","E","A","S","D","Z","X","C"];
+                var ban=["q","w","e","a","s","d","z","x","c"];
+                var bank1=["Heater 1","Heater 2","Heater 3","Heater 4","Clap","Open HH","Kick n' Hat","Kick","Closed HH"]
+                var bank2=["Chord 1","Chord 2","Chord 3","Shaker","Open HH","Closed HH","Punchy Kick","Side Stick","Snare"];
+
+
+                const activeStyle = {
+                backgroundColor: 'orange',
+                boxShadow: '0 3px orange',
+                height: 77,
+                marginTop: 13 };
+
+
+                class Drum extends React.Component{
+                constructor(props){
+                    super(props);
+                    this.state={
+                    displayString:"",
+                    power:true,
+                    bank:false,
+                    b1:"background:blue;",
+                    b2:"background:white;",
+                    p1:"background:white",
+                    p2:"background:blue;",
+                    value:"0.5",
+                    volume:50
+                    }
+                    this.handleKeyPress=this.handleKeyPress.bind(this);
+                    this.toggleHandleb1=this.toggleHandleb1.bind(this);
+                    this.toggleHandleb2=this.toggleHandleb2.bind(this);
+                    this.handlePlay=this.handlePlay.bind(this);
+                    this.toggleHandlep1=this.toggleHandlep1.bind(this);
+                    this.toggleHandlep2=this.toggleHandlep2.bind(this);
+                    this.hadnleKeyPress=this.handleKeyPress.bind(this);
+                    this.onChange=this.onChange.bind(this);
+                }
+                
+                
+                
+                toggleHandleb1(){
+                    this.setState({
+                        b1:"background:blue;",
+                        b2:"background:white",
+                        bank:false
+                    })
+                    
+                }
+                toggleHandleb2(){
+                    this.setState({
+                        b1:"background:white;",
+                        b2:"background:blue;",
+                        bank:true
+                    })
+                }
+                
+                
+                toggleHandlep1(){
+                    this.setState({
+                    p1:"background:blue;",
+                    p2:"background:white;",
+                    power:false,
+                    displayString:""
+                    })
+                    
+                }
+                toggleHandlep2(){
+                    this.setState({
+                    p2:"background:blue;",
+                    p1:"background:white;",
+                    power:true
+                    })
+                    
+                }
+                
+                
+                
+                componentDidMount() {
+                    document.addEventListener('keydown', this.handleKeyPress);
+                }
+                componentWillUnmount() {
+                    document.removeEventListener('keydown', this.handleKeyPress);
+                }
+                handleKeyPress(e) {
+                    var i=ban.indexOf(e.key);
+                    var a=bank1[i];
+                    if(this.state.bank)
+                    a=bank2[ban.indexOf(e.key)];
+                    var s=document.getElementById(a);
+                    s.play();
+                    this.setState({
+                    displayString:a
+                    });
+                    
+                }
+                
+                onChange(e) {
+                    console.log(e.target.value);
+                    const newVal =(e.target.value).toString();
+                    const vol="Volume "+newVal;
+                    this.setState({
+                    volume: newVal,
+                    displayString:vol,
+                    value:(newVal)/100
+                    });
+                    }
+                
+                handlePlay(e){
+                    console.log(e)
+                    var a=e.target.innerHTML[0];
+                    var b=bank1[bank.indexOf(a)]
+                    if(this.state.bank)
+                    b=bank2[bank.indexOf(a)];
+                    var s=document.getElementById(b);
+                    console.log(s);
+                    s.play();
+                    this.setState({
+                    displayString:b
+                    })
+                }
+                
+                
+                render(){
+                    if(this.state.power && (!this.state.bank)){
+                    return(
+                        <div id="drum-machine">
+                        <div id="index">Drum Machine</div>
+                        <div id="keys">
+                        <button onClick={this.handlePlay.bind(this)} id="1" >Q
+                    <audio id="Heater 1" volume={this.state.value} src="https://s3.amazonaws.com/freecodecamp/drums/Heater-1.mp3" type="audio/mpeg"/>
+                    </button>
+                        <button onClick={this.handlePlay.bind(this)} id="2">W
+                    <audio id="Heater 2" volume={this.state.value} src="https://s3.amazonaws.com/freecodecamp/drums/Heater-2.mp3" type="audio/mpeg"/>
+                    </button>
+                        <button onClick={this.handlePlay.bind(this)} id="3">E
+                    <audio id="Heater 3" volume={this.state.value} src="https://s3.amazonaws.com/freecodecamp/drums/Heater-3.mp3" type="audio/mpeg"/>
+                    </button>
+                        <button onClick={this.handlePlay.bind(this)} id="4">A
+                    <audio id="Heater 4" volume={this.state.value} src="https://s3.amazonaws.com/freecodecamp/drums/Heater-4_1.mp3" type="audio/mpeg"/>
+                    </button>
+                        <button onClick={this.handlePlay.bind(this)} id="5">S
+                    <audio id="Clap" volume={this.state.value} src="https://s3.amazonaws.com/freecodecamp/drums/Heater-6.mp3" type="audio/mpeg"/>
+                    </button>
+                        <button onClick={this.handlePlay.bind(this)} id="6">D
+                    <audio id="Open HH" volume={this.state.value} src="https://s3.amazonaws.com/freecodecamp/drums/Dsc_Oh.mp3" type="audio/mpeg"/>
+                            
+                    </button>
+                        <button onClick={this.handlePlay.bind(this)} id="7">Z
+                    <audio id="Kick n' Hat" volume={this.state.value} src="https://s3.amazonaws.com/freecodecamp/drums/Kick_n_Hat.mp3" type="audio/mpeg"/>
+                    </button>
+                        <button onClick={this.handlePlay.bind(this)} id="8">X
+                    <audio id="Kick" volume={this.state.value} src="https://s3.amazonaws.com/freecodecamp/drums/RP4_KICK_1.mp3" type="audio/mpeg"/>
+                    </button>
+                        <button onClick={this.handlePlay.bind(this)} id="9">C
+                    <audio id="Closed HH" volume={this.state.value} src="https://s3.amazonaws.com/freecodecamp/drums/Cev_H2.mp3" type="audio/mpeg"/>
+                    </button>
+                    </div>
+                        <div id="display">{this.state.displayString}</div>
+                        <div id="control">
+                        <div id="p">
+                        <label for="power">Power </label>
+                        <button class="power" onClick={this.toggleHandlep1.bind(this)} Style={this.state.p1}></button>
+                        <button class="power" onClick={this.toggleHandlep2.bind(this)} Style={this.state.p2}></button></div>
+                        <div id="b">
+                        <label for="bank">Bank  </label>
+                        <button class="bank" onClick={this.toggleHandleb1.bind(this)} Style={this.state.b1}></button>
+                        <button class="bank" onClick={this.toggleHandleb2.bind(this)} Style={this.state.b2}></button>
+                        </div>
+                        </div></div>
+                    )
+                    }
+                    else if(this.state.power && this.state.b2){
+                    return(
+                        <div id="drum-machine">
+                        <div id="index">Drum Machine</div>
+                        <div id="keys">
+                        <button onClick={this.handlePlay.bind(this)} id="1">Q
+                    <audio id="Chord 1" volume={this.state.value} src="https://s3.amazonaws.com/freecodecamp/drums/Chord_1.mp3" type="audio/mpeg"/>
+                    </button>
+                        <button onClick={this.handlePlay.bind(this)} id="2">W
+                    <audio id="Chord 2" volume={this.state.value} src="https://s3.amazonaws.com/freecodecamp/drums/Chord_2.mp3" type="audio/mpeg"/>
+                    </button>
+                        <button onClick={this.handlePlay.bind(this)} id="3">E
+                    <audio id="Chord 3" volume={this.state.value} src="https://s3.amazonaws.com/freecodecamp/drums/Chord_3.mp3" type="audio/mpeg"/>
+                    </button>
+                        <button onClick={this.handlePlay.bind(this)} id="4">A
+                    <audio id="Shaker" volume={this.state.value} src="https://s3.amazonaws.com/freecodecamp/drums/Give_us_a_light.mp3" type="audio/mpeg"/>
+                    </button>
+                        <button onClick={this.handlePlay.bind(this)} id="5">S
+                    <audio id="Open HH" volume={this.state.value} src="https://s3.amazonaws.com/freecodecamp/drums/Dry_Ohh.mp3" type="audio/mpeg"/>
+                    </button>
+                        <button onClick={this.handlePlay.bind(this)} id="6">D
+                    <audio id="Closed HH" volume={this.state.value} src="https://s3.amazonaws.com/freecodecamp/drums/Bld_H1.mp3" type="audio/mpeg"/>
+                            
+                    </button>
+                        <button onClick={this.handlePlay.bind(this)} id="7">Z
+                    <audio id="Punchy Kick" volume={this.state.value} src="https://s3.amazonaws.com/freecodecamp/drums/punchy_kick_1.mp3" type="audio/mpeg"/>
+                    </button>
+                        <button onClick={this.handlePlay.bind(this)} id="8">X
+                    <audio id="Side Stick" volume={this.state.value} src="https://s3.amazonaws.com/freecodecamp/drums/side_stick_1.mp3" type="audio/mpeg"/>
+                    </button>
+                        <button onClick={this.handlePlay.bind(this)} id="9">C
+                    <audio id="Snare" volume={this.state.value} src="https://s3.amazonaws.com/freecodecamp/drums/Brk_Snr.mp3" type="audio/mpeg"/>
+                    </button>
+                    </div>
+                        <div id="display">{this.state.displayString}</div>
+                        <div id="control">
+                        <div id="p">
+                        <label for="power">Power </label>
+                        <button class="power" onClick={this.toggleHandlep1.bind(this)} Style={this.state.p1}></button>
+                        <button class="power" onClick={this.toggleHandlep2.bind(this)} Style={this.state.p2}></button></div>
+                        <div id="b">
+                        <label for="bank">Bank </label>
+                        <button class="bank" onClick={this.toggleHandleb1.bind(this)} Style={this.state.b1}></button>
+                        <button class="bank" onClick={this.toggleHandleb2.bind(this)} Style={this.state.b2}></button>
+                        </div>
+                        </div></div>
+                    
+                    );
+                    
+                    }
+                    else{
+                    return(
+                        <div id="drum-machine">
+                        <div id="index">Drum Machine</div>
+                        <div id="keys">
+                        <button >Q</button>
+                        <button>W</button>
+                        <button>E</button>
+                        <button>A</button>
+                        <button>S</button>
+                        <button>D</button>
+                        <button>Z</button>
+                        <button>X</button>
+                        <button>C</button>
+                        </div>
+                        <div id="display">{this.state.displayString}</div>
+                        <div id="control">
+                        <div id="p">
+                        <label for="power">Power </label>
+                        <button class="power" onClick={this.toggleHandlep1.bind(this)} Style={this.state.p1}></button>
+                        <button class="power" onClick={this.toggleHandlep2.bind(this)} Style={this.state.p2}></button></div>
+                        <div id="b">
+                        <label for="bank">Bank </label>
+                        <button class="bank" onClick={this.toggleHandleb1.bind(this)} Style={this.state.b1}></button>
+                        <button class="bank" onClick={this.toggleHandleb2.bind(this)} Style={this.state.b2}></button></div>
+                        </div></div>
+                    
+                    )
+                    }
+                    
+                    
+                    
+
+                }
+                }
+                ReactDOM.render(<Drum/>,document.getElementById("body"));
+            </script>
+    </body>
+</html>

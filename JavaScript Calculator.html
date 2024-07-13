@@ -1,0 +1,240 @@
+<html>
+    <head>
+        <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+        <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+        <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+        <style>
+            #describe{
+            text-align:center;
+            font-size:50px;
+            padding-top:10%;
+            font-weight:bold;
+            font-family:Freestyle Script;
+            }
+            #container{
+            height:50vh;
+            display:grid;
+            grid-template-areas:
+                "clear clear divide multiply"
+                "seven eight nine subtract"
+                "four five six add"
+                "one two three equals"
+                "zero zero decimal equals";
+            }
+            #display{
+            text-align:right;
+            height:20vh;
+            color:white;
+            font-size:30px;
+            
+            }
+            button{
+            border-color:white;
+            font-size:20px;
+            }
+            #inp{
+            color:orange;
+            }
+            #calci{
+            padding-right:1%;
+            padding-left:1%;
+            padding-top:1%;
+            padding-bottom:1%;
+            background:black;
+            margin-left:20%;
+            margin-right:20%;
+            margin-top:3%;
+            margin-bottom:10%;
+            }
+            #clear{grid-area:clear;
+            background:#ff9933;}
+            #divide{grid-area:divide;
+            background:DarkSeaGreen;}
+            #multiply{grid-area:multiply;background:DarkSeaGreen;}
+            #eight{grid-area:eight;}
+            #nine{grid-area:nine;}
+            #seven{grid-area:seven;}
+            #six{grid-area:six;}
+            #five{grid-area:five;}
+            #four{grid-area:four; }
+            #three{grid-area:three;}
+            #two{grid-area:two;}
+            #one{grid-area:one;}
+            #subtract{grid-area:subtract;background:DarkSeaGreen;}
+            #add{grid-area:add;background:DarkSeaGreen;}
+            #zero{grid-area:zero;}
+            #equals{grid-area:equals;background:#ff9933}
+            #decimal{grid-area:decimal;}
+            body{
+            background: linear-gradient(to bottom, #ff9933 0%, #ffffff 100%);
+            }
+            button:hover{
+            color:#000066;
+            border-color:black;
+            border-width:3px;
+            }
+
+
+        </style>
+    </head>
+    <body>
+        <div id ="describe">A Simple Calculator</div>
+        <div id=calculator></div>
+        <script type="text/babel">
+                            
+                class App extends React.Component{
+                constructor(props){
+                    super(props);
+                    this.state={
+                    input:"",
+                    output:0,
+                    current:"0",
+                    flag:false
+                    };
+                }
+                
+                handleButton(e){
+                    var s=e.target.innerText
+                    if(this.state.flag){
+                    if(s==="AC"){
+                        this.setState({
+                        input:"",
+                        current:"0",
+                        output:0,
+                        flag:false
+                        })
+                    }
+                    else if(s!=="+" && s!=="x" && s!=="-" && s!=="/"){
+                        this.setState({
+                        input:s,
+                        current:s,
+                        flag:false
+                        })
+                        var v=this.state.input+s;
+                        v=v.replace("x","*");
+                        console.log("Hello");
+                        console.log(v);
+                        var m=eval(v);
+                        this.setState({
+                        output:m
+                        })
+                    }
+                    else{
+                        var t=(this.state.current)+s;
+                        this.setState(state=>({
+                        input:t,
+                        current:s,
+                        flag:false
+                        }))
+                    }
+                    }
+                else{
+                    if(s==="AC"){
+                    this.setState({
+                        input:"",
+                        current:"0",
+                        output:0
+                    })
+                    }
+                    
+                    
+                    else if(s==="="){
+                    if((this.state.input[(this.state.input).length-1]==="+") || (this.state.input[this.state.input.length-1]==="-") || (this.state.input[this.state.input.length-1]==="/") || (this.state.input[this.state.input.length-1]==="x")){
+                        this.setState(state=>({
+                        input:state.input.slice(0,state.input.length-1)+"="+state.output,
+                        current:state.output,
+                        flag:true
+                        }))
+                        }
+                    else{
+                        this.setState(state=>({
+                        input:state.input.slice(0,state.input.length)+"="+state.output,
+                        current:state.output,
+                        flag:true
+                        }))
+                    }
+                    }
+                    
+                    
+                else{
+                    if(s==="x" || s==="/" || s==="+"){
+                        if((this.state.input[(this.state.input).length-1]==="+") || (this.state.input[this.state.input.length-1]==="-") || (this.state.input[this.state.input.length-1]==="/") || (this.state.input[this.state.input.length-1]==="x")){
+                        this.setState(state=>({
+                            input:state.input.slice(0,state.input.length-1)+s,
+                            current:s
+                        }))
+                        }
+                        else{
+                        this.setState(state=>({
+                            input:state.input+s,
+                            current:s
+                        }))
+                        }
+                    }
+                    else if(s==="-"){
+                        if((this.state.input[(this.state.input).length-1]==="+") || (this.state.input[this.state.input.length-1]==="-")){
+                        this.setState(state=>({
+                            input:state.input.slice(0,state.input.length-1)+s,
+                            current:s
+                        })) 
+                        }
+                    else{
+                        this.setState(state=>({
+                        input:state.input+s,
+                        current:s
+                        }))
+                    }
+                    }
+                    if(s!=="+" && s!=="-" && s!=="x" && s!=="/"){
+                        this.setState(state=>({
+                        input:state.input+s,
+                        current:s
+                        }))
+                        var b=this.state.input+s;
+                        b=b.replace("x","*");
+                        console.log("Hello");
+                        console.log(b);
+                        var a=eval(b);
+                        this.setState({
+                        output:a
+                        })
+                    }
+                    }}
+                }
+                
+                render(){
+                    return(
+                    <div id="calci">
+                        <div id="display">
+                        <p id="inp">{this.state.input}</p>
+                        <p id="cur">{this.state.current}</p>
+                        </div>
+                        <div id="container">
+                        <button id="clear" onClick={this.handleButton.bind(this)}>AC</button>
+                        <button id="divide" onClick={this.handleButton.bind(this)}>/</button>
+                        <button id="multiply" onClick={this.handleButton.bind(this)}>x</button>
+                        <button id="seven" onClick={this.handleButton.bind(this)}>7</button>
+                        <button id="eight" onClick={this.handleButton.bind(this)}>8</button>
+                        <button id="nine" onClick={this.handleButton.bind(this)}>9</button>
+                        <button id="subtract" onClick={this.handleButton.bind(this)}>-</button>
+                        <button id="four" onClick={this.handleButton.bind(this)}>4</button>
+                        <button id="five" onClick={this.handleButton.bind(this)}>5</button>
+                        <button id="six" onClick={this.handleButton.bind(this)}>6</button>
+                        <button id="add" onClick={this.handleButton.bind(this)}>+</button>
+                        <button id="one" onClick={this.handleButton.bind(this)}>1</button>
+                        <button id="two" onClick={this.handleButton.bind(this)}>2</button>
+                        <button id="three" onClick={this.handleButton.bind(this)}>3</button>
+                        <button id="zero" onClick={this.handleButton.bind(this)}>0</button>
+                        <button id="decimal" onClick={this.handleButton.bind(this)}>.</button>
+                        <button id="equals" onClick={this.handleButton.bind(this)}>=</button>
+                        </div>
+                    </div>
+                    
+                    );
+                }
+                }
+
+                ReactDOM.render(<App/>,document.getElementById("calculator"));
+        </script>
+    </body>
+</html>

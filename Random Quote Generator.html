@@ -1,0 +1,118 @@
+<html>
+    <head>
+        <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+        <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+        <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+        <style>
+		#quote-box{
+			background:white;
+			padding-top:10px;
+			padding-bottom:20px;
+			padding-left:20px;
+			padding-right:20px;
+			text-align:center;
+			border-radius:2%;
+			font-family:Century;
+			
+		  }
+		  .tweet{
+			margin:0px 50% 0px 0px;
+		  }
+		  #m{
+			padding-top:10%;
+			padding-left:30%;
+			padding-right:30%;
+			padding-bottom:10%;
+			height:100vh;
+			
+		  }
+		  button{
+			font-size:20px;
+			color:white;
+			border-radius:20px;
+		  }
+		  a{
+			text-decoration:none;
+			color:white;
+		  }
+		  #heading{
+			color:white;
+			padding-left:19%;
+			font-size:40px;
+			font-family:Castellar;
+			
+		  }
+		  #designer{
+			color:white;
+			padding-left:39%;
+			font-size:17px;
+			
+		  }
+		  #author{
+			font-weight:bold;
+			font-size:16px;
+			
+		  }
+		  
+  </style>
+
+    </head>
+    <body id="body">
+        <script type="text/babel">
+            var l=[];
+            function App(){
+            fetch("https://type.fit/api/quotes")
+            .then(response=>response.json())
+            .then(data=>{
+            l=data;
+            class Quote extends React.Component {
+                constructor(props){
+                super(props);
+                this.state={
+                    index:0,
+                    color:"rgb(0,0,0)"
+                };
+                }
+                
+                submitHandle(){
+                let r=Math.floor(Math.random()*l.length);
+                let R=Math.floor(Math.random()*255);
+                let G=Math.floor(Math.random()*255);
+                let B=Math.floor(Math.random()*255);
+                console.log("R "+R);
+                console.log("B "+B);
+                console.log("G "+G);
+                this.setState({
+                    index:r,
+                    color:"rgb("+R+","+G+","+B+");"
+                })
+                
+                }
+                render() {
+                const quote=l[this.state.index].text;
+                const auth=l[this.state.index].author;
+                const co="color:"+this.state.color;
+                const bc="background:"+this.state.color+"; color:white;";
+                return(
+                    <div Id={"m"} Style={bc}>
+                    <h1 Id="heading">Famous Quotes</h1><br/>
+                    <div Id={"quote-box"}>
+                    <h2 Id={"text"} Style={co}>{quote}</h2>
+                    <p Id={"author"} Style={co}>{"- "+auth}</p><br/>
+                    <button Id="new-quote" Style={bc}  onClick={this.submitHandle.bind(this)}>New Quote</button>
+                    </div>
+                    <h1 Id="designer"> By Vivek Sharma </h1>
+                    </div>
+                )
+                }
+            }
+            ReactDOM.render(<Quote/>,document.getElementById("body"));
+            });
+            }
+            ReactDOM.render(
+                    <App />,
+                document.getElementById('body')
+            );
+        </script>
+    </body>
+</html>
