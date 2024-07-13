@@ -23,4 +23,4 @@ This repository contains multiple HTML files that import React.js via links and 
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/miniprojects.git
+   git clone https://github.com/vivek02552/web-based-applications.git
